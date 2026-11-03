@@ -1,0 +1,9 @@
+{
+  "relabel": {"CHAPTER ONE": "Chapter 1 - Dummy title"},
+  "drop": ["Copyright"],
+  "split": [
+    {"file": "text/part0001.xhtml", "before_id": "chapter2"},
+    {"file": "text/part0001.xhtml", "before_text": "CHAPTER THREE"}
+  ],
+  "chapters_from": {"class": "chapter-heading", "heading_tag": "h2"}
+}

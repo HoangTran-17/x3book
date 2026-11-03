@@ -1,0 +1,13 @@
+*.epub
+*.pdf
+*.azw3
+*.azw
+*.mobi
+*.kfx
+__pycache__/
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.venv/
+venv/

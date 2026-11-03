@@ -1,0 +1,16 @@
+{
+  "pdf": {
+    "title": "Dummy Book",
+    "author": "Dummy Author",
+    "lang": "en",
+    "cover_page": 0,
+    "skip_pages": [1],
+    "drop_below_y": 560,
+    "roles": {
+      "Serif-Regular 10": "body",
+      "Serif-Bold 18": "chapter",
+      "Serif-Bold 12": "section",
+      "Serif-Regular 8": "drop"
+    }
+  }
+}

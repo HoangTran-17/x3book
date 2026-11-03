@@ -1,0 +1,12 @@
+{
+  "title": "Dummy Anthology",
+  "author": "Various",
+  "lang": "en",
+  "out": "out/dummy-anthology.epub",
+  "cover": {"heading": ["DUMMY", "ANTHOLOGY"], "subtitle": "example"},
+  "parts": [
+    {"type": "md", "file": "intro.md", "labels": ["Intro - Welcome", "Intro - Notes"]},
+    {"type": "pdf", "file": "source.pdf", "part": "Part I", "pages": [2, 30],
+     "sections": [{"page": 2, "label": "A - Chapter 1", "title": "Chapter 1"}]}
+  ]
+}
