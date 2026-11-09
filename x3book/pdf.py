@@ -265,7 +265,7 @@ def write_epub(out, cfg, files, toc, images, css=CSS):
     for k, f in enumerate(files):
         man.append('<item id="t%d" href="%s" media-type="application/xhtml+xml"/>' % (k, f["name"]))
     for k, n in enumerate(sorted(images)):
-        iid = "cover-img" if n.endswith("cover.jpg") else "i%d" % k
+        iid = "cover-img" if n == "images/cover.jpg" else "i%d" % k
         man.append('<item id="%s" href="%s" media-type="image/jpeg"/>' % (iid, n))
     opf = ('<?xml version="1.0" encoding="utf-8"?>\n<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="uid">\n'
            '<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">\n'
