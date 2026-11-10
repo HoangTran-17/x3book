@@ -52,6 +52,8 @@ def build_parser():
     q = fs.add_parser("build", help="book.md -> EPUB (out may be a folder)")
     q.add_argument("md")
     q.add_argument("out")
+    q.add_argument("--target", choices=["x3", "std"], default="x3",
+                   help="x3: EPUB 2 for CrossVi (default); std: EPUB 3 for phone / PC / Kindle apps")
     q = fs.add_parser("stats", help="word counts and structure")
     q.add_argument("md")
     q = fs.add_parser("source", help="dump an EPUB as plain text per spine file")
@@ -99,7 +101,7 @@ def main(argv=None):
     elif a.cmd == "flashbook":
         from . import flashbook
         if a.fb_cmd == "build":
-            flashbook.build(a.md, a.out)
+            flashbook.build(a.md, a.out, a.target)
         elif a.fb_cmd == "stats":
             flashbook.stats(a.md)
         elif a.fb_cmd == "source":

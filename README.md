@@ -11,6 +11,7 @@ Công cụ dòng lệnh chỉnh EPUB cho máy đọc sách **Xteink X3** chạy 
 - `pdf`: PDF có text -> EPUB reflow.
 - `merge`: ghép nhiều nguồn (PDF + Markdown) thành một EPUB theo plan.
 - `flashbook`: file Markdown tóm tắt sách -> EPUB (`build`), kiểm độ dài (`stats`), EPUB -> text (`source`).
+  `build --target std` ra EPUB 3 cho điện thoại / PC / Kindle (mặc định `x3`: EPUB 2 cho CrossVi).
 - `convert`: azw3 / mobi / docx / fb2 -> EPUB bằng Calibre, rồi `tune`. **Không hỗ trợ file DRM.**
 
 ## Vì sao X3 / CrossVi cần công cụ này
@@ -39,6 +40,7 @@ x3book check "in [X3].epub"
 x3book tune  book.pdf book.epub  pdf-plan.json      # PDF cần khối "pdf" trong plan
 x3book merge merge-plan.json --dump dump/
 x3book flashbook build book.md out/
+x3book flashbook build book.md out/ --target std    # EPUB 3 cho điện thoại / PC / Kindle
 x3book convert book.azw3                            # -> "book [X3].epub"
 ```
 
@@ -99,6 +101,7 @@ Why:
 - Undefined HTML entities (`&emsp;`) stop the expat parser. They become numeric entities.
 
 Commands: `tune`, `check`, `pdf`, `merge`, `flashbook build|stats|source`, `convert`.
+`flashbook build --target std` writes an EPUB 3 for phone / PC / Kindle apps (default `x3`: EPUB 2 for CrossVi).
 DRM-protected files are not supported.
 
 Install:

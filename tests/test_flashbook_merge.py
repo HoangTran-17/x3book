@@ -1,5 +1,8 @@
+import io
 import json
 import re
+
+from PIL import Image
 
 from conftest import quiet, read
 from x3book import flashbook
@@ -43,6 +46,30 @@ def test_flashbook_build_stats_source(tmp_path, capsys):
     txt = tmp_path / "src.txt"
     assert main(["flashbook", "source", str(built[0]), str(txt)]) == 0
     assert "Điều thứ nhất" in txt.read_text(encoding="utf-8")
+
+
+def test_flashbook_build_std(tmp_path):
+    md = tmp_path / "book.md"
+    md.write_text(BOOK_MD.replace("source_pages: 200", "source_pages: 200\nsource: Flashbook X3")
+                  .replace("- ý gạch đầu dòng", "- ý một\n\n- ý hai"), encoding="utf-8")
+    out = tmp_path / "out"
+    out.mkdir()
+    assert main(["flashbook", "build", str(md), str(out), "--target", "std"]) == 0
+    built = list(out.glob("*.epub"))
+    assert [p.name for p in built] == ["Sample Book - Jane Doe [Flashbook].epub"]
+    assert check(str(built[0]), log=quiet) == []
+    data, _ = read(str(built[0]))
+    opf = data["OEBPS/content.opf"].decode()
+    for want in ('version="3.0"', 'properties="nav"', 'properties="cover-image"'):
+        assert want in opf
+    assert re.search(r'<meta property="dcterms:modified">\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ</meta>', opf)
+    assert data["OEBPS/nav.xhtml"].decode().count("<li><a href=") == data["OEBPS/toc.ncx"].decode().count("<navPoint")
+    pages = "".join(v.decode() for k, v in data.items() if k.endswith(".xhtml"))
+    assert "<ul>\n<li>ý một</li>\n<li>ý hai</li>\n</ul>" in pages
+    assert "<strong><em>điểm nhấn</em></strong>" in pages
+    assert '<p class="sub">A test</p>' in pages and "<h4" not in pages
+    assert "— Flashbook</p>" in pages
+    assert Image.open(io.BytesIO(data["OEBPS/cover.jpg"])).size == (1600, 2400)
 
 
 def test_merge_markdown_parts(tmp_path):
