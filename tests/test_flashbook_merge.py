@@ -42,6 +42,10 @@ def test_flashbook_build_stats_source(tmp_path, capsys):
     assert main(["flashbook", "build", str(md), str(out)]) == 0
     built = list(out.glob("*.epub"))
     assert len(built) == 1
+    # EPUB 2 forbids the HTML5 doctype (EPUBCheck HTM-004); omitting it is valid.
+    data, _ = read(str(built[0]))
+    assert 'version="2.0"' in data["OEBPS/content.opf"].decode()
+    assert not any(b"<!DOCTYPE" in v for k, v in data.items() if k.endswith(".xhtml"))
     assert check(str(built[0]), log=quiet) == []
     txt = tmp_path / "src.txt"
     assert main(["flashbook", "source", str(built[0]), str(txt)]) == 0
@@ -65,6 +69,7 @@ def test_flashbook_build_std(tmp_path):
     assert re.search(r'<meta property="dcterms:modified">\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ</meta>', opf)
     assert data["OEBPS/nav.xhtml"].decode().count("<li><a href=") == data["OEBPS/toc.ncx"].decode().count("<navPoint")
     pages = "".join(v.decode() for k, v in data.items() if k.endswith(".xhtml"))
+    assert all(b"<!DOCTYPE html>" in v for k, v in data.items() if k.endswith(".xhtml"))
     assert "<ul>\n<li>ý một</li>\n<li>ý hai</li>\n</ul>" in pages
     assert "<strong><em>điểm nhấn</em></strong>" in pages
     assert '<p class="sub">A test</p>' in pages and "<h4" not in pages

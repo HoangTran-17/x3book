@@ -245,7 +245,9 @@ def build(src, out, target="x3"):
     # a separate id for the std edition, so apps holding both never merge them into one book
     uid = "urn:uuid:" + str(uuid.uuid5(uuid.NAMESPACE_URL, ("flashbook-std:" if std else "flashbook:") + meta["title"] + meta.get("author", "")))
     html_tag = '<html xmlns="http://www.w3.org/1999/xhtml" lang="vi" xml:lang="vi">' if std else '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="vi">'
-    page = lambda body: ('<?xml version="1.0" encoding="utf-8"?>\n<!DOCTYPE html>\n' + html_tag + '\n'
+    # EPUB 2 (x3) rejects the HTML5 doctype (EPUBCheck HTM-004); no doctype is valid there.
+    doctype = '<!DOCTYPE html>\n' if std else ''
+    page = lambda body: ('<?xml version="1.0" encoding="utf-8"?>\n' + doctype + html_tag + '\n'
                          '<head><title>%s</title><link rel="stylesheet" type="text/css" href="style.css"/></head>\n<body>\n%s\n</body>\n</html>\n'
                          % (html.escape(title), "\n".join(body)))
     man = ['<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>',
